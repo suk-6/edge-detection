@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>View</title>
+		<style>
+			body {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 40rem;
+			}
+
+			img {
+				transform: scale(2);
+				margin: 10rem;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			const refresh = () => {
+				fetch("/data/{{ id }}")
+					.then((response) => response.json())
+					.then((data) => {
+						if (data.refresh) {
+							document.body.innerHTML = `
+								<img src="data:image/png;base64,${data.gray}" />
+								<img src="data:image/png;base64,${data.edge}" />
+								<img src="data:image/png;base64,${data.blur}" />
+							`;
+						} else {
+							clearInterval(refreshInterval);
+						}
+					});
+			};
+
+			let refreshInterval = setInterval(refresh, 500);
+		</script>
+	</body>
+</html>
